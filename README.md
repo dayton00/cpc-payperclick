@@ -7,10 +7,12 @@
 Then  run the cpc-payperclick folder
 
 //Database interaction
+
 incase of editing remember to edit click/connect.php
 
 
 //Technology used
+
 CPC website pay per add click. php & mysql 
 
 //features
