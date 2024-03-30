@@ -1,0 +1,63 @@
+-- Create the database if not exists
+CREATE DATABASE IF NOT EXISTS ad_earnings;
+
+-- Use the created database
+USE ad_earnings;
+
+-- Table for storing user information
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    surname VARCHAR(255) NOT NULL,
+    othernames VARCHAR(255),
+    mobile_number VARCHAR(15) NOT NULL,
+    home_country VARCHAR(255) NOT NULL,
+    identity_type VARCHAR(255) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    mobile_number2 VARCHAR(15),
+    town VARCHAR(255),
+    number VARCHAR(255) NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    balance DECIMAL(10, 2)
+);
+
+-- Table for storing ad details
+CREATE TABLE IF NOT EXISTS ads (
+    ad_id INT AUTO_INCREMENT PRIMARY KEY,
+    advertiser_id INT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    cpa_amount DECIMAL(10, 2),
+    cpc_amount DECIMAL(10, 2),
+    total_budget DECIMAL(10, 2),
+    remaining_budget DECIMAL(10, 2),
+    start_date DATE,
+    end_date DATE,
+    status ENUM('active', 'inactive') DEFAULT 'inactive',
+    FOREIGN KEY (advertiser_id) REFERENCES users(user_id)
+);
+
+-- Table for tracking user clicks on ads
+CREATE TABLE IF NOT EXISTS ad_clicks (
+    click_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    ad_id INT,
+    click_date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (ad_id) REFERENCES ads(ad_id)
+);
+
+-- Table for recording user actions and earnings
+CREATE TABLE IF NOT EXISTS user_actions (
+    action_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    ad_id INT,
+    action_type ENUM('click', 'conversion') NOT NULL,
+    action_date DATETIME,
+    earnings DECIMAL(10, 2),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (ad_id) REFERENCES ads(ad_id)
+);
